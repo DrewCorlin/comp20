@@ -1,9 +1,43 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Landmarks</title>
-</head>
-<body>
-
-</body>
+  <head>
+    <title>Landmarks</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      var map;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 42.406784, lng: -71.122633},
+          zoom: 15
+        });
+      }
+      var lat, lng;
+      function storeLatLng(position) {
+        lat = position.coords.latitude;
+        lng = position.coords.longitude;
+      }
+      function storeLocation(){
+        navigator.geolocation.getCurrentPosition(storeLatLng);
+      }
+      storeLocation();
+      sendRequest(latitude, longitude){
+        var xhr = XMLHttpRequest();
+        xhr.open(POST, "https://defense-in-derpth.herokuapp.com/sendLocation");
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.send("login=HGmgDS0E&lat=" + latitude + "&lng=" + longitude);
+      }
+      // Fill in necessary lats and lngs
+      var distance = google.maps.geometry.spherical.computeDistanceBetween({ lat: , lng:  },{ lat: , lng:  });
+      // Convert to miles
+      distance = distance/1609.34;
+      
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3-FjpeNtlQLUSClPJKxIDjagGNx_sw2I&callback=initMap"
+    async defer></script>
+  </body>
 </html>
