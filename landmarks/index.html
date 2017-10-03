@@ -9,20 +9,7 @@
   <body>
     <div id="map"></div>
     <script>
-      
-      var locations = [
-          { lat: 42.406784, lng: -71.122633 },
-          { lat: 42.406746, lng: -71.123633 },
-          { lat: 42.406738, lng: -71.122633 },
-          { lat: 42.406799, lng: -71.122633 },
-          { lat: 42.403784, lng: -71.122655 },
-          { lat: 42.406784, lng: -71.132677 },
-          { lat: 42.406784, lng: -71.172698 }
-        ];
-
-      var titles = ['Marker 1', 'Marker 2', 'Marker 3', 'Marker 4', 'Marker 5', 'Marker 6', 'Marker 7'];
-      
-      var map;
+      var lat, lng, response, landmarks, people, map;
       
       function initMap(){
         map = new google.maps.Map(document.getElementById('map'), 
@@ -30,20 +17,41 @@
           center: { lat: 42.406784, lng: -71.122633 },
           zoom: 15
         });
-        for (var i = 0; i < locations.length; i++) {
-          createMarker(locations[i], titles[i]).setMap(map);
+      }
+
+      function createMarkers(){
+        console.log(landmarks);
+        for (var i = 0; i < landmarks.length; i++) {
+          var pos = { lat: landmarks[i].geometry.coordinates[1], lng: landmarks[i].geometry.coordinates[0] }
+          createMarker(pos, map, landmarks[i].properties.Details).setMap(map);
+          console.log(pos);
         }
       }
 
-      function createMarker(positionArg, titleArg){
+      function createMarker(positionArg, mapArg, titleArg){
         var marker = new google.maps.Marker({
           position: positionArg,
           title: titleArg
         });
+
+        var myLoc = new google.maps.LatLng({ lat: lat, lng: lng });
+        var otherLoc = new google.maps.LatLng({ lat: positionArg.lat, lng: positionArg.lng});
+
+        var distance = google.maps.geometry.spherical.computeDistanceBetween(myLoc, otherLoc);
+        // Convert to miles
+        distance = distance/1609.34;
+        
+        var infowindow = new google.maps.InfoWindow({
+          content: titleArg
+        });
+
+        marker.addListener('click', function(){
+          infowindow.open(mapArg, marker);
+        });
+
         return marker;
       }
 
-      var lat, lng, response;
       
       function storeLatLng(position) {
         lat = position.coords.latitude;
@@ -62,7 +70,9 @@
       xhr.onreadystatechange = function() {
         if (xhr.readyState == XMLHttpRequest.DONE) {
           response = JSON.parse(xhr.responseText);
-          console.log(response);
+          landmarks = response.landmarks;
+          people = response.people;
+          createMarkers();
         }
       }
       
@@ -71,12 +81,9 @@
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.send("login=HGmgDS0E&lat=" + latitude + "&lng=" + longitude);
       }
-      // Fill in necessary lats and lngs
-      //var distance = google.maps.geometry.spherical.computeDistanceBetween({ lat: , lng:  },{ lat: , lng: });
-      // Convert to miles
-      //distance = distance/1609.34;
+
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3-FjpeNtlQLUSClPJKxIDjagGNx_sw2I&callback=initMap"
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3-FjpeNtlQLUSClPJKxIDjagGNx_sw2I&callback=initMap&libraries=geometry"
     async defer></script>
   </body>
 </html>
