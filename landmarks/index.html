@@ -9,7 +9,7 @@
   <body>
     <div id="map"></div>
     <script>
-      var lat, lng, response, landmarks, people, map;
+      var lat, lng, response, landmarks, people, map, myLoc;
       
       function initMap(){
         map = new google.maps.Map(document.getElementById('map'), 
@@ -19,22 +19,42 @@
         });
       }
 
+      function createMyMarker(){
+        var myPos = { lat: lat, lng: lng };
+        var lowestDistance = 10000000000;
+        var closestLandmark, tempDistance;
+
+        for (var x = 0; x < landmarks.length; x++){
+          landmarkLoc = new google.maps.LatLng({
+            lat: landmarks[x].geometry.coordinates[1], lng: landmarks[x].geometry.coordinates[0] 
+          });
+          tempDistance = google.maps.geometry.spherical.computeDistanceBetween(myLoc, landmarkLoc);
+          if (tempDistance < lowestDistance){
+            lowestDistance = tempDistance;
+            closestLandmark = landmarks[x];
+          }
+        }
+        // Convert to miles
+        lowestDistance = lowestDistance/1609.34;
+        var markerTitle = '<p>' + closestLandmark.properties.Location_Name + '</p>' + '<p> Distance: ' + lowestDistance + ' Miles </p>';
+        createMarker(myPos, map, markerTitle, 'pic.png').setMap(map);
+      }
+
       function createMarkers(){
-        console.log(landmarks);
         for (var i = 0; i < landmarks.length; i++) {
-          var pos = { lat: landmarks[i].geometry.coordinates[1], lng: landmarks[i].geometry.coordinates[0] }
+          var pos = { lat: landmarks[i].geometry.coordinates[1], lng: landmarks[i].geometry.coordinates[0] };
           createMarker(pos, map, landmarks[i].properties.Details).setMap(map);
-          console.log(pos);
         }
       }
 
-      function createMarker(positionArg, mapArg, titleArg){
+      function createMarker(positionArg, mapArg, titleArg, img){
         var marker = new google.maps.Marker({
           position: positionArg,
-          title: titleArg
+          title: titleArg,
+          icon: img
         });
 
-        var myLoc = new google.maps.LatLng({ lat: lat, lng: lng });
+        myLoc = new google.maps.LatLng({ lat: lat, lng: lng });
         var otherLoc = new google.maps.LatLng({ lat: positionArg.lat, lng: positionArg.lng});
 
         var distance = google.maps.geometry.spherical.computeDistanceBetween(myLoc, otherLoc);
@@ -73,6 +93,7 @@
           landmarks = response.landmarks;
           people = response.people;
           createMarkers();
+          createMyMarker();
         }
       }
       
