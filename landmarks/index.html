@@ -9,33 +9,72 @@
   <body>
     <div id="map"></div>
     <script>
+      
+      var locations = [
+          { lat: 42.406784, lng: -71.122633 },
+          { lat: 42.406746, lng: -71.123633 },
+          { lat: 42.406738, lng: -71.122633 },
+          { lat: 42.406799, lng: -71.122633 },
+          { lat: 42.403784, lng: -71.122655 },
+          { lat: 42.406784, lng: -71.132677 },
+          { lat: 42.406784, lng: -71.172698 }
+        ];
+
+      var titles = ['Marker 1', 'Marker 2', 'Marker 3', 'Marker 4', 'Marker 5', 'Marker 6', 'Marker 7'];
+      
       var map;
-      function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 42.406784, lng: -71.122633},
+      
+      function initMap(){
+        map = new google.maps.Map(document.getElementById('map'), 
+        {
+          center: { lat: 42.406784, lng: -71.122633 },
           zoom: 15
         });
+        for (var i = 0; i < locations.length; i++) {
+          createMarker(locations[i], titles[i]).setMap(map);
+        }
       }
-      var lat, lng;
+
+      function createMarker(positionArg, titleArg){
+        var marker = new google.maps.Marker({
+          position: positionArg,
+          title: titleArg
+        });
+        return marker;
+      }
+
+      var lat, lng, response;
+      
       function storeLatLng(position) {
         lat = position.coords.latitude;
         lng = position.coords.longitude;
+        sendRequest(lat, lng);
       }
+      
       function storeLocation(){
         navigator.geolocation.getCurrentPosition(storeLatLng);
       }
+      
       storeLocation();
-      sendRequest(latitude, longitude){
-        var xhr = XMLHttpRequest();
-        xhr.open(POST, "https://defense-in-derpth.herokuapp.com/sendLocation");
+      
+      var xhr = new XMLHttpRequest();
+      
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+          response = JSON.parse(xhr.responseText);
+          console.log(response);
+        }
+      }
+      
+      function sendRequest(latitude, longitude){
+        xhr.open('POST', "https://defense-in-derpth.herokuapp.com/sendLocation");
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.send("login=HGmgDS0E&lat=" + latitude + "&lng=" + longitude);
       }
       // Fill in necessary lats and lngs
-      var distance = google.maps.geometry.spherical.computeDistanceBetween({ lat: , lng:  },{ lat: , lng:  });
+      //var distance = google.maps.geometry.spherical.computeDistanceBetween({ lat: , lng:  },{ lat: , lng: });
       // Convert to miles
-      distance = distance/1609.34;
-      
+      //distance = distance/1609.34;
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3-FjpeNtlQLUSClPJKxIDjagGNx_sw2I&callback=initMap"
     async defer></script>
