@@ -39,7 +39,6 @@
         var markerTitle = '<p>' + closestLandmark.properties.Location_Name + '</p>' + '<p> Distance: ' + lowestDistance + ' Miles </p>';
         createMarker(myPos, map, markerTitle, 'pic.png').setMap(map);
         createPolyline(closestLandmark.geometry.coordinates[1], closestLandmark.geometry.coordinates[0]).setMap(map);
-        polyline.setMap(null);
       }
 
       function createPolyline(otherLat, otherLng){
@@ -89,18 +88,12 @@
           content: titleArg
         });
 
-        if (img == 'pic.png'){
-          console.log('Mine');
-          marker.addListener('click', function(){
-            polyline.setMap(mapArg);
-            infowindow.open(mapArg, marker);
-          });
-        }
-        else{
           marker.addListener('click', function(){
             infowindow.open(mapArg, marker);
           });
-        }
+          marker.addListener('click', function(){
+            infowindow.open(mapArg, marker);
+          });
 
         return marker;
       }
