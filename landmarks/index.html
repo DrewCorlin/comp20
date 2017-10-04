@@ -9,7 +9,7 @@
   <body>
     <div id="map"></div>
     <script>
-      var lat, lng, response, landmarks, people, map, myLoc;
+      var lat, lng, response, landmarks, people, map, myLoc, polyline;
       
       function initMap(){
         map = new google.maps.Map(document.getElementById('map'), 
@@ -38,12 +38,41 @@
         lowestDistance = lowestDistance/1609.34;
         var markerTitle = '<p>' + closestLandmark.properties.Location_Name + '</p>' + '<p> Distance: ' + lowestDistance + ' Miles </p>';
         createMarker(myPos, map, markerTitle, 'pic.png').setMap(map);
+        createPolyline(closestLandmark.geometry.coordinates[1], closestLandmark.geometry.coordinates[0]).setMap(map);
+        polyline.setMap(null);
+      }
+
+      function createPolyline(otherLat, otherLng){
+        polyline = new google.maps.Polyline({
+          path: [ { lat: lat, lng: lng }, { lat: otherLat, lng: otherLng } ],
+          geodesic: true,
+          strokeColor: '#FF0000',
+          strokeOpacity: 1.0,
+          strokeWeight: 2
+        });
+        return polyline;
       }
 
       function createMarkers(){
-        for (var i = 0; i < landmarks.length; i++) {
-          var pos = { lat: landmarks[i].geometry.coordinates[1], lng: landmarks[i].geometry.coordinates[0] };
-          createMarker(pos, map, landmarks[i].properties.Details).setMap(map);
+        //Markers for landmarks
+        for (var i = 0; i < landmarks.length; i++){
+          var landmarkPosition = new google.maps.LatLng({ lat: landmarks[i].geometry.coordinates[1], lng: landmarks[i].geometry.coordinates[0] });
+          myLoc = new google.maps.LatLng({ lat: lat, lng: lng });
+          if ((google.maps.geometry.spherical.computeDistanceBetween(myLoc, landmarkPosition)/1609.34) < 1){
+            var pos = { lat: landmarks[i].geometry.coordinates[1], lng: landmarks[i].geometry.coordinates[0] };
+            createMarker(pos, map, landmarks[i].properties.Details, 'blueicon.png').setMap(map);
+          }
+        }
+        //Markers for people
+        for (var j = 0; j < people.length; j++){
+          var position = { lat: people[j].lat, lng: people[j].lng };
+          var positionObject = new google.maps.LatLng(position);
+          myLoc = new google.maps.LatLng({ lat: lat, lng: lng });
+          var distance = google.maps.geometry.spherical.computeDistanceBetween(myLoc, positionObject);
+          // Convert to miles
+          distance = distance/1609.34;
+          var title = '<p>' + people[j].login + '</p>' + '<p> Distance: ' + distance + '</p>';
+          createMarker(position, map, title, 'orangeicon.png').setMap(map);
         }
       }
 
@@ -53,25 +82,28 @@
           title: titleArg,
           icon: img
         });
-
         myLoc = new google.maps.LatLng({ lat: lat, lng: lng });
         var otherLoc = new google.maps.LatLng({ lat: positionArg.lat, lng: positionArg.lng});
-
-        var distance = google.maps.geometry.spherical.computeDistanceBetween(myLoc, otherLoc);
-        // Convert to miles
-        distance = distance/1609.34;
         
         var infowindow = new google.maps.InfoWindow({
           content: titleArg
         });
 
-        marker.addListener('click', function(){
-          infowindow.open(mapArg, marker);
-        });
+        if (img == 'pic.png'){
+          console.log('Mine');
+          marker.addListener('click', function(){
+            polyline.setMap(mapArg);
+            infowindow.open(mapArg, marker);
+          });
+        }
+        else{
+          marker.addListener('click', function(){
+            infowindow.open(mapArg, marker);
+          });
+        }
 
         return marker;
       }
-
       
       function storeLatLng(position) {
         lat = position.coords.latitude;
