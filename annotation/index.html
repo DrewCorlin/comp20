@@ -10,28 +10,135 @@
 
 		<h1 id="title">A Classic</h1>
 
+
 		<video src="https://www.cs.tufts.edu/comp/20/classic.mp4" id="a_classic" controls>
 			<track kind="captions" src="captions.vtt" srclang="en">
 		</video>
 
-		<div id="lyrics">
-			<button onclick='logTimes()'> Click </button>
-		</div>
+		<div id="lyrics"></div>
 
 		<script>
-			function logIt(){
-				var vid = document.getElementById('a_classic');
-				console.log(vid.currentTime)
-			};
-
-			function logTimes(){
-				var i = 0;
-				//Figure out how to get this timing interval to work
-				while (i < 20){
-					setTimeout(logIt, 1000);
-					i++;
+			var vid = document.getElementById('a_classic');
+			var lyrics = document.getElementById('lyrics');
+			vid.addEventListener("timeupdate", function() {
+				if (vid.currentTime < 9){
+					lyrics.innerHTML = "";
 				}
-			}
+				else if (vid.currentTime > 9 && vid.currentTime <= 13){
+					lyrics.innerHTML = "Children have You ever met the Bogeyman before";
+				}
+				else if (vid.currentTime > 13 && vid.currentTime <= 17){
+					lyrics.innerHTML = "No, of course You haven't for You're much too good, I'm sure;";
+				}
+				else if (vid.currentTime > 17 && vid.currentTime <= 21){
+					lyrics.innerHTML = "Don't You be afraid of him if he should visit You,";
+				}
+				else if (vid.currentTime > 21 && vid.currentTime <= 25){
+					lyrics.innerHTML = "He's a great big coward, so I'll tell You what to do";
+				}
+				else if (vid.currentTime > 25 && vid.currentTime <= 29){
+					lyrics.innerHTML = "Hush, hush, hush, here comes the Bogeyman,";
+				}
+				else if (vid.currentTime > 29 && vid.currentTime <= 33){
+					lyrics.innerHTML = "Don't let him come too close to You, he'll catch you if he can.";
+				}
+				else if (vid.currentTime > 33 && vid.currentTime <= 37){
+					lyrics.innerHTML = "Just pretend that you're a crocodile";
+				}
+				else if (vid.currentTime > 37 && vid.currentTime <= 41){
+					lyrics.innerHTML = "And you will find that Bogeyman will run away a mile.";
+				}
+				else if (vid.currentTime > 41 && vid.currentTime <= 45){
+					lyrics.innerHTML = "Say Shoo shoo and stick him with a pin";
+				}
+				else if (vid.currentTime > 45 && vid.currentTime <= 49){
+					lyrics.innerHTML = "Bogeyman will very nearly jump out of his skin";
+				}
+				else if (vid.currentTime > 49 && vid.currentTime <= 53){
+					lyrics.innerHTML = "Say buzz buzz just like the wasps that sting";
+				}
+				else if (vid.currentTime > 53 && vid.currentTime <= 56){
+					lyrics.innerHTML = "Bogeyman will think you are an elephant with wings";
+				}
+				else if (vid.currentTime > 56 && vid.currentTime <= 60){
+					lyrics.innerHTML = "Hush, hush, hush, here comes the Bogeyman";
+				}
+				else if (vid.currentTime > 60 && vid.currentTime <= 64){
+					lyrics.innerHTML = "";
+				}
+				else if (vid.currentTime > 64 && vid.currentTime <= 68){
+					lyrics.innerHTML = "Tell him you've got soldiers in your bed";
+				}
+				else if (vid.currentTime > 68 && vid.currentTime <= 72){
+					lyrics.innerHTML = "For he will never guess that they are only made of lead";
+				}
+				else if (vid.currentTime > 72 && vid.currentTime <= 80){
+					lyrics.innerHTML = "";
+				}
+				else if (vid.currentTime > 80 && vid.currentTime <= 84){
+					lyrics.innerHTML = "Say Hush hush, he'll think that you're asleep";
+				}
+				else if (vid.currentTime > 84 && vid.currentTime <= 88){
+					lyrics.innerHTML = "If you make a lovely snore away he'll softly creep";
+				}
+				else if (vid.currentTime > 88 && vid.currentTime <= 92){
+					lyrics.innerHTML = "Sing this tune you children one and all";
+				}
+				else if (vid.currentTime > 92 && vid.currentTime <= 95){
+					lyrics.innerHTML = "Bogeyman will run away, he'll think it's Henry Hall!";
+				}
+				else if (vid.currentTime > 95 && vid.currentTime <= 99){
+					lyrics.innerHTML = "When the shadows of the evening creep across the sky";
+				}
+				else if (vid.currentTime > 99 && vid.currentTime <= 103){
+					lyrics.innerHTML = "And your Mummy comes upstairs to sing a lullaby";
+				}
+				else if (vid.currentTime > 103 && vid.currentTime <= 107){
+					lyrics.innerHTML = "Tell her that the bogeyman no longer frightens you";
+				}
+				else if (vid.currentTime > 107 && vid.currentTime <= 111){
+					lyrics.innerHTML = "Uncle Henry's very kindly told you what to do";
+				}
+				else if (vid.currentTime > 111 && vid.currentTime <= 114){
+					lyrics.innerHTML = "Hush, hush, hush, here comes the Bogeyman";
+				}
+				else if (vid.currentTime > 114 && vid.currentTime <= 119){
+					lyrics.innerHTML = "Don't let him come too close to you, He'll catch you if he can.";
+				}
+				else if (vid.currentTime > 119 && vid.currentTime <= 122){
+					lyrics.innerHTML = "Just pretend your teddy bear's a dog";
+				}
+				else if (vid.currentTime > 122 && vid.currentTime <= 126){
+					lyrics.innerHTML = "Then shout out, 'Fetch him, Teddy!' and he'll hop off like a frog.";
+				}
+				else if (vid.currentTime > 126 && vid.currentTime <= 135){
+					lyrics.innerHTML = "";
+				}
+				else if (vid.currentTime > 135 && vid.currentTime <= 138){
+					lyrics.innerHTML = "Say Meoow, pretend that you're a cat";
+				}
+				else if (vid.currentTime > 138 && vid.currentTime <= 142){
+					lyrics.innerHTML = "He'll think you may scratch him that make him fall down flat";
+				}
+				else if (vid.currentTime > 142 && vid.currentTime <= 146){
+					lyrics.innerHTML = "Just pretend he isn't really there";
+				}
+				else if (vid.currentTime > 146 && vid.currentTime <= 150){
+					lyrics.innerHTML = "You will find that Bogey man will vanish in thin air";
+				}
+				else if (vid.currentTime > 150 && vid.currentTime <= 158){
+					lyrics.innerHTML = "";
+				}
+				else if (vid.currentTime > 158 && vid.currentTime <= 161){
+					lyrics.innerHTML = "Here's one way to catch him without fail";
+				}
+				else if (vid.currentTime > 161 && vid.currentTime <= 164){
+					lyrics.innerHTML = "Just keep a little salt with you";
+				}
+				else if (vid.currentTime > 164){
+					lyrics.innerHTML = "and put it on his tail";
+				}
+			}, false);
 		</script>
 	</body>
 </html>

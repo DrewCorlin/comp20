@@ -1,9 +1,13 @@
 #title{
 	text-align: center;
 	font-family: Helvetica, sans-serif;
+	color: #636260;
 }
 
-#a_classic{
-	position: relative;
-	left: 24%;
+body{
+	text-align: center;
+}
+
+#lyrics{
+	color: #636260;
 }
