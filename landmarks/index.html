@@ -113,7 +113,7 @@
       var xhr = new XMLHttpRequest();
       
       xhr.onreadystatechange = function() {
-        if (xhr.readyState == XMLHttpRequest.DONE) {
+        if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
           response = JSON.parse(xhr.responseText);
           landmarks = response.landmarks;
           people = response.people;
