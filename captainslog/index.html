@@ -8,9 +8,23 @@
     <link rel="stylesheet" href="style.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
+        function displayLogs() {
+            console.log(localStorage.length);
+            for (var i = 0; i < localStorage.length; i++){
+                $('#log').html(localStorage.getItem(localStorage.key(i)));
+            }
+        }
+        $(document).ready(function(){
+            displayLogs();
+        });
         $(document).keypress(function(e){
             if(e.which == 13){
-                console.log($('#msg').val());
+                var date = new Date();
+                var str = date.toString();
+                localStorage.setItem(str + ' ' + $('#msg').val(), str + ' ' + $('#msg').val());
+                var item = localStorage.getItem('entry');
+                $('#msg').val('');
+                displayLogs();
             }
         });
     </script>
