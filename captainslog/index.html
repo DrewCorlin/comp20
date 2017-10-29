@@ -8,23 +8,25 @@
     <link rel="stylesheet" href="style.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
-        function displayLogs() {
-            console.log(localStorage.length);
+        function initialLogs() {
             for (var i = 0; i < localStorage.length; i++){
-                $('#log').html(localStorage.getItem(localStorage.key(i)));
+                $('#log').prepend('<p>' + localStorage.getItem(localStorage.key(i)) + '</p>');
             }
         }
+        function addLog(){
+            $('#log').prepend('<p>' + localStorage.getItem(localStorage.key(localStorage.length - 1)) + '</p>');
+        }
         $(document).ready(function(){
-            displayLogs();
+            initialLogs();
         });
         $(document).keypress(function(e){
-            if(e.which == 13){
+            if(e.which == 13 && $('#msg').val() != ''){
                 var date = new Date();
                 var str = date.toString();
                 localStorage.setItem(str + ' ' + $('#msg').val(), str + ' ' + $('#msg').val());
                 var item = localStorage.getItem('entry');
                 $('#msg').val('');
-                displayLogs();
+                addLog();
             }
         });
     </script>
