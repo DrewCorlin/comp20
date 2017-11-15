@@ -55,16 +55,16 @@
       function createMarkers(){
         //Markers for landmarks
         for (var i = 0; i < landmarks.length; i++){
-          var landmarkPosition = new google.maps.LatLng({ lat: landmarks[i].geometry.coordinates[1], lng: landmarks[i].geometry.coordinates[0] });
+          var landmarkPosition = new google.maps.LatLng({ lat: parseFloat(landmarks[i].geometry.coordinates[1]), lng: parseFloat(landmarks[i].geometry.coordinates[0]) });
           myLoc = new google.maps.LatLng({ lat: lat, lng: lng });
           if ((google.maps.geometry.spherical.computeDistanceBetween(myLoc, landmarkPosition)/1609.34) < 1){
-            var pos = { lat: landmarks[i].geometry.coordinates[1], lng: landmarks[i].geometry.coordinates[0] };
+            var pos = { lat: parseFloat(landmarks[i].geometry.coordinates[1]), lng: parseFloat(landmarks[i].geometry.coordinates[0]) };
             createMarker(pos, map, landmarks[i].properties.Details, 'blueicon.png').setMap(map);
           }
         }
         //Markers for people
         for (var j = 0; j < people.length; j++){
-          var position = { lat: people[j].lat, lng: people[j].lng };
+          var position = { lat: parseFloat(people[j].lat), lng: parseFloat(people[j].lng) };
           var positionObject = new google.maps.LatLng(position);
           myLoc = new google.maps.LatLng({ lat: lat, lng: lng });
           var distance = google.maps.geometry.spherical.computeDistanceBetween(myLoc, positionObject);
@@ -123,9 +123,10 @@
       }
       
       function sendRequest(latitude, longitude){
-        xhr.open('POST', "https://defense-in-derpth.herokuapp.com/sendLocation");
+        xhr.open('POST', "https://gentle-badlands-53680.herokuapp.com/sendLocation?login=HGmgDS0E&lat=" + latitude + "&lng=" + longitude);
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhr.send("login=HGmgDS0E&lat=" + latitude + "&lng=" + longitude);
+        xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+        xhr.send();
       }
 
     </script>
