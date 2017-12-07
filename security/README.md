@@ -35,7 +35,7 @@ MONGOLAB_URI='mongodb://' + encryptedUser + encryptedPass + '59325/heroku_gt907w
 	var lng = request.body.lng;
 The way to fix this would be to remove any special characters, that allow script excecution from the query parameters and body parameters. Some of those characters could be "<>/\n;'(), to name a few.
 
-3. Improper neutralization of response. On lines 50, 85 and 127. The severity is meidum for this issue, because while it could be very costly, it would require the attacker to interfere with the data coming from the database, which while possible is much harder to do than a simple XSS attack. The outcome of successfully doing this attack would be that the user's browser would excecute whatever scripts the attacker has inserted into the response. This issue was found by using the veracode static scan. The way to fix this issue is to sanitize the responses that are sent back to the user, in the same way that user input is sanitized before it is sent to the server.
+3. Improper neutralization of response. On lines 50, 85 and 127. The severity is high for this issue, because while it could be very costly, as it is in a sense the second half of the injection that was mentioned in number 1. The outcome of successfully doing this attack would be that the user's browser would excecute whatever scripts the attacker has inserted into the response. This issue was found by using the veracode static scan. The way to fix this issue is to sanitize the responses that are sent back to the user, in the same way that user input is sanitized before it is sent to the server.
 	response.send(indexPage);
 	response.send(peoplejson);
 	response.send(results);

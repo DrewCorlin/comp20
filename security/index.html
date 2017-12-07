@@ -27,6 +27,7 @@
 				encryptedPASS=ENCRYPTION_OF_PASSWORD
 				MONGOLAB_URI='mongodb://' + encryptedUser + encryptedPass + '59325/heroku_gt907wrx'
 			</li><br/>
+			<img src="credentials.png">
 			<li>
 				The second issue is that user input is not sanitized, and is thus succeptible to cross site scripting. The issue is on lines 71 and 101-103. The severity of this is high, because cross site scripting means that somebody can completely cripple your website, as the user sees it. Even worse, somebody could keep the website functional in all aspects, except for that sensitive user data is sent to them as well as to you. In the latter case, neither the user nor the owner of the website would be aware that anything was wrong. I found this issue by reading through the source code. The lines where this vulnerability is present are shown here:<br/><br/>
 					coll.find({login : request.query.login}).toArray(function(err, results)
@@ -35,12 +36,14 @@
 					var lng = request.body.lng;<br/><br/>
 				The way to fix this would be to remove any special characters, that allow script excecution from the query parameters and body parameters. Some of those characters could be "<>/\n;'(), to name a few.
 			</li><br/>
+			<img src="injection.png">
 			<li>
-		Improper neutralization of response. On lines 50, 85 and 127. The severity is meidum for this issue, because while it could be very costly, it would require the attacker to interfere with the data coming from the database, which while possible is much harder to do than a simple XSS attack. The outcome of successfully doing this attack would be that the user's browser would excecute whatever scripts the attacker has inserted into the response. This issue was found by using the veracode static scan. The way to fix this issue is to sanitize the responses that are sent back to the user, in the same way that user input is sanitized before it is sent to the server.<br/><br/>
+		Improper neutralization of response. On lines 50, 85 and 127. The severity is high for this issue, because while it could be very costly, as it is in a sense the second half of the injection that was mentioned in number 1. The outcome of successfully doing this attack would be that the user's browser would excecute whatever scripts the attacker has inserted into the response. This issue was found by using the veracode static scan. The way to fix this issue is to sanitize the responses that are sent back to the user, in the same way that user input is sanitized before it is sent to the server.<br/><br/>
 			response.send(indexPage);
 			response.send(peoplejson);
 			response.send(results);
 		</li>
+		<img src="alert.png">
 	</ol><br/>
 Conclusion
 	The good news is that these issues are not extremely hard to fix, nor are they expensive to. None of them are design flaws, rather they are implementation flaws, meaning they can be fixed by just changing a few lines of sources code, rather than redesiging and then subsequently reimplementing the whole program. I would say the changes could be made in a few of hours, including time to test that the service still works as intended and is no longer succeptible to the attacks that are outlined here.
